@@ -104,6 +104,15 @@ def add():
     comment = request.form.get("comment")
     conn = sqlite3.connect('service.db')
     c = conn.cursor()
+
+    #現在の日付
+    date1 = datetime.date.today()
+    print(date1)
+ 
+    #現在の日付と日時
+    date2 = datetime.datetime.now()
+    print(date2)
+
     # DBにデータを追加する
     c.execute("insert into bbs values(null,?,?)", (user_id, comment))
     conn.commit()
