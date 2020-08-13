@@ -2,6 +2,7 @@
 import sqlite3
 # flaskをimportしてflaskを使えるようにする
 from flask import Flask , render_template , request , redirect , session
+import datetime
 # appにFlaskを定義して使えるようにしています。Flask クラスのインスタンスを作って、 app という変数に代入しています。
 app = Flask(__name__)
 
@@ -114,7 +115,7 @@ def add():
     print(date2)
 
     # DBにデータを追加する
-    c.execute("insert into bbs values(null,?,?)", (user_id, comment))
+    c.execute("insert into bbs values(null,?,?)", (user_id, comment,time,))
     conn.commit()
     conn.close()
     return redirect('/bbs')
