@@ -87,7 +87,7 @@ def bbs():
         c.execute("select name from user where id = ?", (user_id,))
         # fetchoneはタプル型
         user_info = c.fetchone()
-        c.execute("select id,comment from bbs where userid = ? order by id", (user_id,))
+        c.execute("select id,comment from bbs where userid = ? and flag is null order by id", (user_id,))
         comment_list = []
         for row in c.fetchall():
             comment_list.append({"id": row[0], "comment": row[1]})
@@ -106,16 +106,8 @@ def add():
     conn = sqlite3.connect('service.db')
     c = conn.cursor()
 
-    #現在の日付
-    date1 = datetime.date.today()
-    print(date1)
- 
-    #現在の日付と日時
-    date2 = datetime.datetime.now()
-    print(date2)
-
     # DBにデータを追加する
-    c.execute("insert into bbs values(null,?,?)", (user_id, comment,time,))
+    c.execute("insert into bbs values(null,?,?,null,null)", (user_id, comment,))
     conn.commit()
     conn.close()
     return redirect('/bbs')
@@ -174,7 +166,7 @@ def del_task():
     id = int(id)
     conn = sqlite3.connect("service.db")
     c = conn.cursor()
-    c.execute("delete from bbs where id = ?", (id,))
+    c.execute("update bbs set flag = 1 where id = ?", (id,))
     conn.commit()
     c.close()
     return redirect("/bbs")
@@ -193,4 +185,4 @@ def notfound404(code):
 # __name__ というのは、自動的に定義される変数で、現在のファイル(モジュール)名が入ります。 ファイルをスクリプトとして直接実行した場合、 __name__ は __main__ になります。
 if __name__ == "__main__":
     # Flask が持っている開発用サーバーを、実行します。
-    app.run()
+    app.run(debug = True)
